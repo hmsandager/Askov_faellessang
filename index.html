@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fællessang</title>
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #faf7f2;
+    color: #2b2118;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+  }
+  main {
+    width: 100%;
+    max-width: 480px;
+  }
+  h1 {
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+  p.sub {
+    text-align: center;
+    color: #6b5d4f;
+    margin-top: 0;
+    margin-bottom: 1.75rem;
+    font-size: 0.95rem;
+  }
+
+  /* Today hero card */
+  a.today {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(135deg, #d9a75c, #a9762f);
+    border-radius: 18px;
+    padding: 1.4rem 1.3rem;
+    box-shadow: 0 4px 14px rgba(169,118,47,0.35);
+    margin-bottom: 2rem;
+    transition: transform 0.1s ease;
+  }
+  a.today:active { transform: scale(0.98); }
+  .today-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+  }
+  .today-day {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff3e0;
+  }
+  .today-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 0.1rem;
+  }
+  .today-cta {
+    margin-top: 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .no-today {
+    text-align: center;
+    color: #6b5d4f;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding: 0.9rem;
+    border: 1px dashed #d8cbb8;
+    border-radius: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body { background: #1c1712; color: #f1e9dd; }
+    p.sub { color: #b8a892; }
+    .no-today { border-color: #4a3f30; color: #b8a892; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Fællessang</h1>
+  <p class="sub">Dagens sang findes automatisk</p>
+
+  <div id="today-slot"></div>
+</main>
+
+<script>
+  // day: 0 = søndag … 6 = lørdag (matcher Date.getDay())
+  const songs = [
+    { day: 0, name: "Søndag",  title: "Sommersalme",                     file: "Søndag. Sommersalme.pdf" },
+    { day: 1, name: "Mandag",  title: "Spænd over os dit himmelsejl",    file: "Mandag. Spænd over os dit himmelsejl.pdf" },
+    { day: 2, name: "Tirsdag", title: "Jeg plukker fløjlsgræs",           file: "Tirsdag. Jeg plukker floejlsgraes.pdf" },
+    { day: 3, name: "Onsdag",  title: "Den danske sang",                 file: "Onsdag. Den danske sang.pdf" },
+  ];
+
+  function songLink(s) {
+    return encodeURIComponent(s.file).replace(/%2E/g, ".");
+  }
+
+  const todayIndex = new Date().getDay();
+  const todaySong = songs.find(s => s.day === todayIndex);
+  const todaySlot = document.getElementById("today-slot");
+
+  if (todaySong) {
+    todaySlot.innerHTML = `
+      <a class="today" href="${songLink(todaySong)}">
+        <span class="today-badge">I dag</span>
+        <div class="today-day">${todaySong.name}</div>
+        <div class="today-title">${todaySong.title}</div>
+        <div class="today-cta">Åbn noder →</div>
+      </a>`;
+  } else {
+    todaySlot.innerHTML = `<div class="no-today">Ingen sang registreret for i dag</div>`;
+  }
+</script>
+</body>
+</html>
